@@ -58,7 +58,7 @@ class Launcher(context: Context) : BaseActivity() {
         super.onWindowFocusChanged(hasFocus)
     }
 
-    fun onOrientationChanged() {
+    private fun onOrientationChanged() {
         Log.d(TAG, "onOrientationChanged: ")
     }
 
