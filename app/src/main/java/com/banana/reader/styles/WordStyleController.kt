@@ -1,4 +1,4 @@
 package com.banana.reader.styles
 
-class WordSizeProvider {
+class WordStyleController {
 }

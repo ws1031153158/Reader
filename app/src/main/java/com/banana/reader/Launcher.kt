@@ -1,26 +1,24 @@
 package com.banana.reader
 
-import android.content.Context
 import android.content.pm.ActivityInfo.CONFIG_ORIENTATION
 import android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 
-class Launcher(context: Context) : BaseActivity() {
+class Launcher : BaseActivity() {
 
     companion object {
         const val TAG = "Launcher"
     }
 
-    private val mContext = context
     private lateinit var mLifecycleLog : LauncherLifecycleLog
     private lateinit var mOldConfig : Configuration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mLifecycleLog = LauncherLifecycleLog(this)
-        mLifecycleLog.onCreate()
         mOldConfig = Configuration(resources.configuration)
+        mLifecycleLog.onCreate()
         super.onCreate(savedInstanceState)
     }
 
@@ -45,7 +43,7 @@ class Launcher(context: Context) : BaseActivity() {
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        Log.d(TAG, "onConfigurationChange: $mContext")
+        Log.d(TAG, "onConfigurationChange: $this")
         var diff : Int = newConfig.diff(mOldConfig)
         if ((diff and (CONFIG_ORIENTATION or CONFIG_SCREEN_SIZE)) != 0) {
             onOrientationChanged()
