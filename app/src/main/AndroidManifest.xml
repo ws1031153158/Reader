@@ -14,15 +14,21 @@
         android:theme="@style/Theme.Reader"
         tools:targetApi="31">
 
-    <activity
-        android:name="com.banana.reader.Launcher"
-        android:launchMode="singleTask"
-        android:exported="true">
-    <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-    </intent-filter>
-    </activity>
+        <activity
+            android:name="com.banana.reader.Launcher"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name="com.banana.reader.edit.AddItemActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>

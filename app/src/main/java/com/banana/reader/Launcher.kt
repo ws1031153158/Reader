@@ -5,6 +5,8 @@ import android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import com.banana.reader.indicator.IndicatorBar
+import com.banana.reader.navigation.NavigationBar
 
 class Launcher : BaseActivity() {
 
@@ -12,14 +14,25 @@ class Launcher : BaseActivity() {
         const val TAG = "Launcher"
     }
 
-    private lateinit var mLifecycleLog : LauncherLifecycleLog
-    private lateinit var mOldConfig : Configuration
+    private lateinit var mLifecycleLog: LauncherLifecycleLog
+    private lateinit var mOldConfig: Configuration
+
+    private lateinit var mScrollBar: ScrollBar
+    private lateinit var mIndicatorBar: IndicatorBar
+    private lateinit var mNavigationBar: NavigationBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mLifecycleLog = LauncherLifecycleLog(this)
         mOldConfig = Configuration(resources.configuration)
         mLifecycleLog.onCreate()
+        setupViews()
         super.onCreate(savedInstanceState)
+    }
+
+    private fun setupViews() {
+        mScrollBar.setupView()
+        mIndicatorBar.setupView()
+        mNavigationBar.setupView()
     }
 
     override fun onStart() {
