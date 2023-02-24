@@ -17,6 +17,7 @@
         <activity
             android:name="com.banana.reader.Launcher"
             android:launchMode="singleTask"
+            android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,8 +27,17 @@
 
 
         <activity android:name="com.banana.reader.edit.AddItemActivity"
+            android:excludeFromRecents="true">
+        </activity>
+
+        <activity android:name="com.banana.reader.settings.SettingsActivity"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT"/>
+                <category android:name="android.intent.category.TAB"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
     </application>
 

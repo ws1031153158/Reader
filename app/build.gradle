@@ -7,6 +7,10 @@ android {
     namespace 'com.banana.reader'
     compileSdk 33
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.banana.reader"
         minSdk 31

@@ -1,4 +1,8 @@
 package com.banana.reader.edit
 
-class DeleteDiaLog {
+import android.app.Dialog
+import android.content.Context
+
+class DeleteDiaLog(context: Context, themeResId: Int) : Dialog(context, themeResId) {
+
 }
