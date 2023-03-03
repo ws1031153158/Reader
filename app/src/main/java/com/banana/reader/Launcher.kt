@@ -1,12 +1,20 @@
 package com.banana.reader
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo.CONFIG_ORIENTATION
 import android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+import com.banana.reader.broadcast.ScreenChangedBroadcastReceiver
 import com.banana.reader.databinding.*
 import com.banana.reader.edit.AddItemActivity
 import com.banana.reader.indicator.IndicatorBar
@@ -19,23 +27,36 @@ class Launcher : BaseActivity() {
         const val TAG = "Launcher"
     }
 
-    private lateinit var mLifecycleLog: LauncherLifecycleLog
+    private lateinit var mObserver: LifecycleObserver
     private lateinit var mOldConfig: Configuration
 
+    private lateinit var mModel: LauncherModel
     private lateinit var mScrollBar: ScrollBar
     private lateinit var mIndicatorBar: IndicatorBar
     private lateinit var mNavigationBar: NavigationBar
     private lateinit var mSearchBar: SearchBar
     private lateinit var mLauncherViewBinding : LauncherBinding
 
+    private lateinit var mBroadcastReceiver: ScreenChangedBroadcastReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        mLifecycleLog = LauncherLifecycleLog(this)
         mOldConfig = Configuration(resources.configuration)
-        mLifecycleLog.onCreate()
+        mObserver = LifecycleObserver(this)
+        mModel = ViewModelProvider(this, LauncherModel.ModelFactory())[LauncherModel::class.java]
+        mBroadcastReceiver = ScreenChangedBroadcastReceiver()
 
         super.onCreate(savedInstanceState)
 
+        observeModel()
+        lifecycle.addObserver(mObserver)
+        registerReceiver()
         setupViews()
+    }
+
+    private fun observeModel() {
+        mModel.itemCount.observe(this, Observer { count ->
+            count
+        })
     }
 
     private fun setupViews() {
@@ -53,24 +74,30 @@ class Launcher : BaseActivity() {
         mSearchBar.setupView(mLauncherViewBinding.root)
     }
 
+    private fun registerReceiver() {
+        registerReceiver(mBroadcastReceiver, IntentFilter(Constants.SYSTEM_SCREEN_ON))
+    }
+
     override fun onStart() {
-        mLifecycleLog.onStart()
         super.onStart()
     }
 
     override fun onResume() {
-        mLifecycleLog.onResume()
         super.onResume()
     }
 
     override fun onPause() {
-        mLifecycleLog.onPause()
         super.onPause()
     }
 
     override fun onDestroy() {
-        mLifecycleLog.onDestroy()
+
+        unregisterReceiver()
         super.onDestroy()
+    }
+
+    private fun unregisterReceiver() {
+        unregisterReceiver(mBroadcastReceiver)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -83,7 +110,6 @@ class Launcher : BaseActivity() {
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        mLifecycleLog.onWindowFocusChanged()
         super.onWindowFocusChanged(hasFocus)
     }
 
@@ -111,5 +137,11 @@ class Launcher : BaseActivity() {
         intent.action = Intent.ACTION_EDIT
         intent.addCategory(Intent.CATEGORY_TAB)
         startActivity(intent)
+    }
+
+    fun notifyMessageUpdate() {
+        var intent = Intent()
+        intent.action = Intent.ACTION_PACKAGE_CHANGED
+        sendBroadcast(intent)
     }
 }
