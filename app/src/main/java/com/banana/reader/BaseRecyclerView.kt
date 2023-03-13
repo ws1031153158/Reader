@@ -14,6 +14,10 @@ abstract class BaseRecyclerView @JvmOverloads constructor(
 
     }
 
+    override fun setAdapter(adapter: Adapter<*>?) {
+        super.setAdapter(adapter)
+    }
+
     override fun onSizeChanged(width: Int, height: Int, lastWidth: Int, lastHeight: Int) {
 
     }
